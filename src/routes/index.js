@@ -5,8 +5,9 @@ const router = Router();
 
 router.get("/", home);
 
-// Add a user
+// Add/Register a user
 router.route("/users").post(createUser);
+router.route("/register").post(createUser);
 
 // Get all users
 router.route("/users").get(getUsers);

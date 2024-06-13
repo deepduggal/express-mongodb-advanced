@@ -1,4 +1,4 @@
-
+import { genSalt, hash } from "bcrypt";
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
@@ -15,19 +15,33 @@ const userSchema = new Schema({
     required: true,
     // unique?
   },
-  // password: {
-  //   type: String,
-  //   required: true,
-  //   length: {
-  //     min: 6,
-  //     max: 255
-  //   }
-  // },
+  password: {
+    type: String,
+    required: true,
+    length: {
+      min: 6,
+      max: 255
+    }
+  },
   isActive: {
     type: Boolean,
     required: true,
     default: false
   },
+});
+
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+  console.log('User is about to be saved', this);
+  try {
+    // hash password
+    const salt = await genSalt(10);
+    this.password = await hash(this.password, salt);
+  }
+  catch (err) {
+    next(err);
+  }
+  next();
 });
 
 const User = model('User', userSchema);
