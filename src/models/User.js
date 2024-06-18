@@ -23,6 +23,12 @@ const userSchema = new Schema({
       max: 255
     }
   },
+  role: {
+    type: String,
+    required: true,
+    enum: ['admin', 'user'],
+    default: 'user'
+  },
   isActive: {
     type: Boolean,
     required: true,
